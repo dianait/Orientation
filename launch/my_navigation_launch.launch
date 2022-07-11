@@ -1,0 +1,29 @@
+<launch>
+    <!-- Arguments -->
+    <arg name="model" default="burger"/>
+    <arg name="map_file" default="/home/diana/mapas/jinko_map.yaml"/>
+    <arg name="open_rviz" default="true"/>
+    <arg name="rviz_config" default="/home/diana/catkin_ws/src/turtlebot3/turtlebot3_navigation/rviz/turtlebot3_navigation.rviz"/>
+
+    <!-- Turtlebot3 -->
+    <include file="/home/diana/catkin_ws/src/turtlebot3/turtlebot3_bringup/launch/turtlebot3_remote.launch">
+        <arg name="model" value="$(arg model)"/>
+    </include>
+
+    <!-- Map server -->
+    <include file="/home/diana/catkin_ws/src/provide_map/launch/provide_map.launch"/>
+
+    <!-- AMCL -->
+    <include file="/home/diana/catkin_ws/src/turtlebot3/turtlebot3_navigation/launch/amcl.launch"/>
+
+    <!-- move_base -->
+    <include file="/home/diana/catkin_ws/src/turtlebot3/turtlebot3_navigation/launch/move_base.launch">
+            <arg name="model" value="$(arg model)"/>
+    </include>
+
+    <!-- rviz -->
+    <group if="$(arg open_rviz)">
+        <node pkg="rviz" type="rviz" name="rviz" required="true"
+              args="-d $(arg rviz_config)"/>
+    </group>
+</launch>
